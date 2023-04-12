@@ -1,26 +1,25 @@
 //axios import buraya gelecek
+import axios from "axios";
 
 var benimIP;
-
 
 // ------------ değiştirmeyin --------------
 // licensed to Ergineer 2022
 require("babel-core/register");
 require("babel-polyfill");
-async function ipAdresimiAl(){
-	await axios({
-		method: 'get',
-		url: 'https://apis.ergineer.com/ipadresim',
-	})
-	.then(function (response) {
-		return response.data
-	})
-	.then(function (a) {
-		benimIP=a
-	});
-}				
+async function ipAdresimiAl() {
+  await axios({
+    method: "get",
+    url: "https://apis.ergineer.com/ipadresim",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .then(function (a) {
+      benimIP = a;
+    });
+}
 // ------------ değiştirmeyin --------------
-
 
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
@@ -67,6 +66,54 @@ async function ipAdresimiAl(){
 	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
 */
 
-
-
 //kodlar buraya gelecek
+
+function geoLocation(obje) {
+  const cardOlustur = document.createElement("div");
+  const imgOlustur = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const ipOlustur = document.createElement("h3");
+  const ulkeOlustur = document.createElement("p");
+  const enlemBoylam = document.createElement("p");
+  const sehirOlustur = document.createElement("p");
+  const saatDilimi = document.createElement("p");
+  const paraBirimi = document.createElement("p");
+  const isp = document.createElement("p");
+
+  cardOlustur.classList.add("card");
+  cardInfo.classList.add("card-info");
+  ipOlustur.classList.add("ip");
+  ulkeOlustur.classList.add("ulke");
+
+  imgOlustur.src = obje.ülkebayrağı;
+  ipOlustur.textContent = obje.sorgu;
+  ulkeOlustur.textContent = `${obje.ülke} (${obje.ülkeKodu})`;
+  enlemBoylam.textContent = `Enlem: ${obje.enlem}  Boylam:${obje.boylam} `;
+  sehirOlustur.textContent = "Şehir: " + obje.şehir;
+  saatDilimi.textContent = "Saat Dilimi: " + obje.saatdilimi;
+  paraBirimi.textContent = "Para Birimi: " + obje.parabirimi;
+  isp.textContent = "ISP: " + obje.isp;
+
+  cardInfo.appendChild(ipOlustur);
+  cardInfo.appendChild(ulkeOlustur);
+  cardInfo.appendChild(enlemBoylam);
+  cardInfo.appendChild(sehirOlustur);
+  cardInfo.appendChild(saatDilimi);
+  cardInfo.appendChild(paraBirimi);
+  cardInfo.appendChild(isp);
+  cardOlustur.appendChild(imgOlustur);
+  cardOlustur.appendChild(cardInfo);
+
+  return cardOlustur;
+}
+
+const cardsAl = document.querySelector(".cards");
+
+axios
+  .get("https://apis.ergineer.com/ipgeoapi/88.251.21.205")
+  .then((response) => {
+    cardsAl.appendChild(geoLocation(response.data));
+  })
+  .catch((error) => {
+    console.log("Error");
+  });
